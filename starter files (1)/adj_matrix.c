@@ -49,13 +49,23 @@
  */
 AdjacencyMatrix* createAdjacencyMatrix(int defaultEdgeValue)
 {
-    // a void cast to prevent 'unused variable warning'
-    // remove the following line of code when you have 
-    // implemented the function yourself
-    (void)defaultEdgeValue;
+    //create the adjacency matrix - size of pre defined number of vertices
+    int **qMatrix = (int*)myMalloc(sizeof(int)*NUMBER_OF_VERTICES);
 
-    // returning NOT_IMPLEMENTED until your own implementation is provided
-    return NULL;
+    //check dynamic memory allocation for errors
+    if (qMatrix == NULL){
+        return NULL;
+    }
+
+    //initialise with default edge given
+    for (int i=0; i<NUMBER_OF_VERTICES; i++){
+        for (int j=0; j<NUMBER_OF_VERTICES; j++){
+            qMatrix[i][j] == defaultEdgeValue;
+        }
+    }
+
+    //return pointer to created Adjency Matrix
+    return qMatrix;
 }
 
 /**
@@ -67,16 +77,28 @@ AdjacencyMatrix* createAdjacencyMatrix(int defaultEdgeValue)
  */
 int addEdge(AdjacencyMatrix *pMatrix, int src, int dest, int weight)
 {
-    // void casts to prevent 'unused variable warning'
-    // remove the following lines of code when you have 
-    // implemented the function yourself
-    (void)pMatrix;
-    (void)src;
-    (void)dest;
-    (void)weight;
+    //set the corresponding place in the adjancy matrix to = the weight 
+    if (pMatrix->matrix[src][dest] = weight){
+        return SUCCESS;
+    }else{
+        return INVALID_INPUT_PARAMETER;
+    }
 
-    // returning NOT_IMPLEMENTED until your own implementation provided
-    return NOT_IMPLEMENTED;
+
+    //ADD ERROR CHECKING ON INPUTS
+
+
+
+    //NO
+    //navigate to that place in the array
+    //for(int i=0; i<sizeof(pMatrix[]); i++){
+     //   for (int j=0; j<sizeof(pMatrix); j++){
+     //       //change it to be a point and add values
+     //       pMatrix->matrix[i][j].src = src;
+     //       pMatrix->matrix[i][j].dest = dest;
+            
+      //  }
+    //}
 }
 
 /**
@@ -97,15 +119,27 @@ int addEdge(AdjacencyMatrix *pMatrix, int src, int dest, int weight)
  */
 int addEdges(AdjacencyMatrix *pMatrix, Edge edges[], int edgeNum)
 { 
-    // void casts to prevent 'unused variable warning'
-    // remove the following lines of code when you have 
-    // implemented the function yourself
-    (void)pMatrix;
-    (void)edges;
-    (void)edgeNum;
+    int fail = 0;
+    //for all edges entered
+    for (int i = 0; i<sizeof(edges); i++){
+        //check edge is within bounds for dest, src and weight are all >=0
+        if ((edges[i].dest >= 0 && edges[i].src >= 0 && edges[i].weight >=0)){ //put x and y value in
+            //add edge to the array
+            if (addEdge(pMatrix, edges[i].dest, edges[i].src, edges[i].weight) == INVALID_INPUT_PARAMETER){
+                //if adding the edge returns a fail code, add 1 to the fail count
+                fail++;
+            }
+        }
 
-    // returning NOT_IMPLEMENTED until your own implementation provided
-    return NOT_IMPLEMENTED;
+        //decide failure amount
+        if (fail == sizeof(edges)){
+            return INVALID_INPUT_PARAMETER;
+        }else if (fail == 0){
+            return SUCCESS;
+        }else{
+            return PARTIAL_SUCCESS;
+        }
+    }
 }
 
 /**
@@ -138,14 +172,34 @@ int addEdges(AdjacencyMatrix *pMatrix, Edge edges[], int edgeNum)
  */
 int loadMatrixFromFile(AdjacencyMatrix *pMatrix, char filename[])
 {
-    // void casts to prevent 'unused variable warning'
-    // remove the following lines of code when you have 
-    // implemented the function yourself
-    (void)pMatrix;
-    (void)filename;
+    //LOOK AT THE FILE - LOTS OF ERROR STUFF TO PROBABLY ADD FOR IF THE GIVEN FILE IS WROMG - LIKE HAVE A FORMAT CHECK IN IT
+    FILE *fp;
+    char *s = "";
+    int n = 22; //check
+    //open the file
+    fp = fopen(filename, "r");
+    //check the file opened correctly
+    if (fp !=NULL){
+        //ADD A FORMAT CHECK
+        //read in a line and add its values
+        while (*fgets(s, n, fp) != NULL){
+            //for the length of that line
+            for (int j=0; j<sizeof(s); j++){
+                int index = 0;
+                char ch = s[index];
+                //parse the charector to a int for putting into the array
+                int add = atoi(ch);
+                //while the current spot is not a space,
+                while (ch != " "){
+                    pMatrix->matrix[index][j] = add;
+                }
+                index++;
+            }
+        }
+    }
 
-    // returning NOT_IMPLEMENTED until your own implementation provided
-    return NOT_IMPLEMENTED;
+    //close the file
+    int fclose(FILE *fp);
 }
 
 
