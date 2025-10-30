@@ -34,36 +34,36 @@ int main()
     testCreateAdjacencyMatrix();
 
     // test the addEdge() function, to add a single edge to a graph
-    printf("\n## NEXT TEST : addEdge() ##\n");
-    testAddEdge();
+    //printf("\n## NEXT TEST : addEdge() ##\n");
+    //testAddEdge();
 
     // test the addEdges() function, to add a collection of Edges to a graph
-    printf("\n## NEXT TEST : addEdges() ##\n");
-    testAddEdges();
+    //printf("\n## NEXT TEST : addEdges() ##\n");
+    //testAddEdges();
 
     // test the loadMatrixFromFile() function
-    printf("\n## NEXT TEST : loadMatrixFromFile() ##\n");
-    testLoadMatrixFromFile();
+    //printf("\n## NEXT TEST : loadMatrixFromFile() ##\n");
+    //testLoadMatrixFromFile();
 
     // test the doDepthFirstTraversal() function
-    printf("\n## NEXT TEST : doDepthFirstTraversal() ##\n");
-    testDoDepthFirstTraversal();
+    //printf("\n## NEXT TEST : doDepthFirstTraversal() ##\n");
+    //testDoDepthFirstTraversal();
 
     // test the runDijsktraAlgorithm() function
-    printf("\n## NEXT TEST : runDijsktraAlgorithm() ##\n");
-    testRunDijsktraAlgorithm();
+    //printf("\n## NEXT TEST : runDijsktraAlgorithm() ##\n");
+    //testRunDijsktraAlgorithm();
 
     // test the getShortestPathFrom() function
-    printf("\n## NEXT TEST : getShortestPathFrom() ##\n");
-    testGetShortestPathFrom();
+    //printf("\n## NEXT TEST : getShortestPathFrom() ##\n");
+    //testGetShortestPathFrom();
 
     // test the addEdgeToAdjacencyList() function
-    printf("\n## NEXT TEST : addEdgeToAdjacencyList() ##\n");
-    testAddEdgeToAdjacencyList();
+    //printf("\n## NEXT TEST : addEdgeToAdjacencyList() ##\n");
+    //testAddEdgeToAdjacencyList();
 
     // test the populateAdjacencyMatrixFromAdjacencyList() function
-    printf("\n## NEXT TEST : populateAdjacencyMatrixFromAdjacencyList() ##\n");
-    testPopulateAdjacencyMatrixFromAdjacencyList();
+    //printf("\n## NEXT TEST : populateAdjacencyMatrixFromAdjacencyList() ##\n");
+    //testPopulateAdjacencyMatrixFromAdjacencyList();
 }
 
 

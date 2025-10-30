@@ -121,7 +121,7 @@ int addEdges(AdjacencyMatrix *pMatrix, Edge edges[], int edgeNum)
 { 
     int fail = 0;
     //for all edges entered
-    for (int i = 0; i<sizeof(edges); i++){
+    for (int i = 0; i<edgeNum; i++){
         //check edge is within bounds for dest, src and weight are all >=0
         if ((edges[i].dest >= 0 && edges[i].src >= 0 && edges[i].weight >=0)){ //put x and y value in
             //add edge to the array
@@ -187,10 +187,10 @@ int loadMatrixFromFile(AdjacencyMatrix *pMatrix, char filename[])
             for (int j=0; j<sizeof(s); j++){
                 int index = 0;
                 char ch = s[index];
-                //parse the charector to a int for putting into the array
-                int add = atoi(ch);
                 //while the current spot is not a space,
                 while (ch != " "){
+                    //parse the charector to a int for putting into the array
+                    int add = ch - '0';
                     pMatrix->matrix[index][j] = add;
                 }
                 index++;
@@ -207,13 +207,28 @@ int loadMatrixFromFile(AdjacencyMatrix *pMatrix, char filename[])
 
 int doDepthFirstTraversal(AdjacencyMatrix *pMatrix, int startingNode, int traversalOutput[])
 { 
-    // void casts to prevent 'unused variable warning'
-    // remove the following lines of code when you have 
-    // implemented the function yourself
-    (void)pMatrix;
-    (void)startingNode;
-    (void)traversalOutput;
+    //initialise variables
+    bool visited[NUMBER_OF_VERTICES][NUMBER_OF_VERTICES];
+    int currentNode = pMatrix->matrix[0][0];
+    visited[0][0] = true;
 
-    // returning NOT_IMPLEMENTED until your own implementation provided
-    return NOT_IMPLEMENTED;
+    //go to the following on nodes - NOT CURRENTLY ON FOLLOWING ON ONES
+    for (int i = 0; i<sizeOf(pMatrix); i++){
+        for (int j = 0; j<sizeOf(pMatrix); j++){
+            if(pMatrix->matrix[i][j] != 0){
+                //there is a edge here
+                //check if visited
+                if (visited[i][j] == true){
+                    //exit
+                }else{
+                    //push the current node onto a stack
+                    //modify current node to be node i
+                    currentNode = pMatrix->matrix[i][j];
+                    //record as visited
+                    visited[i][j] = true;
+                }
+                //check if can backtrack using the stack made- pop if nessesary, this will become the new current node - repeat above with this
+            }
+        }
+    }
 }
