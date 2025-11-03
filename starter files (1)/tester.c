@@ -30,8 +30,8 @@ int main()
     // HAVE IMPLEMENTED THE CODE FOR THE RELEVANT FUNCTIONS THAT THEY RELATE TO 
 
     // method to test the createAdjacencyMatrix() function
-    printf("## FIRST TEST : createAdjacencyMatrix() ##\n");
-    testCreateAdjacencyMatrix();
+    //printf("## FIRST TEST : createAdjacencyMatrix() ##\n");
+    //testCreateAdjacencyMatrix();
 
     // test the addEdge() function, to add a single edge to a graph
     //printf("\n## NEXT TEST : addEdge() ##\n");
@@ -50,8 +50,8 @@ int main()
     //testDoDepthFirstTraversal();
 
     // test the runDijsktraAlgorithm() function
-    //printf("\n## NEXT TEST : runDijsktraAlgorithm() ##\n");
-    //testRunDijsktraAlgorithm();
+    printf("\n## NEXT TEST : runDijsktraAlgorithm() ##\n");
+    testRunDijsktraAlgorithm();
 
     // test the getShortestPathFrom() function
     //printf("\n## NEXT TEST : getShortestPathFrom() ##\n");

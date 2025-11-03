@@ -33,6 +33,8 @@
 #include "adj_matrix.h"         // required, to include the Adjacency Matrix data structures and function declarations
                                 // that are being implemented in this file
 #include <stdbool.h>            // required, to include the definition of the 
+#include <string.h>             // allows for strtok later on
+#include <stdlib.h>             // allows for atoi later on
 
 
 /** #### FUNCTION IMPLEMENTATIONS ## */
@@ -50,7 +52,8 @@
 AdjacencyMatrix* createAdjacencyMatrix(int defaultEdgeValue)
 {
     //create the adjacency matrix - size of pre defined number of vertices
-    int **qMatrix = (int*)myMalloc(sizeof(int)*NUMBER_OF_VERTICES);
+    AdjacencyMatrix *qMatrix = NULL;
+    qMatrix = (AdjacencyMatrix*)myMalloc(sizeof(AdjacencyMatrix));
 
     //check dynamic memory allocation for errors
     if (qMatrix == NULL){
@@ -60,7 +63,7 @@ AdjacencyMatrix* createAdjacencyMatrix(int defaultEdgeValue)
     //initialise with default edge given
     for (int i=0; i<NUMBER_OF_VERTICES; i++){
         for (int j=0; j<NUMBER_OF_VERTICES; j++){
-            qMatrix[i][j] == defaultEdgeValue;
+            qMatrix->matrix[i][j] = defaultEdgeValue;
         }
     }
 
@@ -132,7 +135,7 @@ int addEdges(AdjacencyMatrix *pMatrix, Edge edges[], int edgeNum)
         }
 
         //decide failure amount
-        if (fail == sizeof(edges)){
+        if (fail == edgeNum){
             return INVALID_INPUT_PARAMETER;
         }else if (fail == 0){
             return SUCCESS;
@@ -170,65 +173,128 @@ int addEdges(AdjacencyMatrix *pMatrix, Edge edges[], int edgeNum)
  * The function should return SUCCESS or a relevant error code.
  * 
  */
-int loadMatrixFromFile(AdjacencyMatrix *pMatrix, char filename[])
+int loadMatrixFromFile(AdjacencyMatrix *pMatrix, char filename[]) //NO OUTPUT???????????????????????????????????????????????????????????????????????????????????????????
 {
     //LOOK AT THE FILE - LOTS OF ERROR STUFF TO PROBABLY ADD FOR IF THE GIVEN FILE IS WROMG - LIKE HAVE A FORMAT CHECK IN IT
+    //set up variables
     FILE *fp;
-    char *s = "";
-    int n = 22; //check
+    char s[22];
+    char ch = ' ';
+    int sucess = 0;
+    int row = 0;
     //open the file
     fp = fopen(filename, "r");
-    //check the file opened correctly
+    //if the file has opened correctly;
     if (fp !=NULL){
         //ADD A FORMAT CHECK
-        //read in a line and add its values
-        while (*fgets(s, n, fp) != NULL){
+
+        //while the line read in is not NULL;
+        while (fgets(s, 22, fp) != NULL){
+            //printf("%s", s);
+            //set the column to 0
+            int c = 0;
             //for the length of that line
-            for (int j=0; j<sizeof(s); j++){
-                int index = 0;
-                char ch = s[index];
-                //while the current spot is not a space,
-                while (ch != " "){
-                    //parse the charector to a int for putting into the array
-                    int add = ch - '0';
-                    pMatrix->matrix[index][j] = add;
+            for (int j=0; j<(NUMBER_OF_VERTICES*2)-1; j++){
+                //split by the space
+                char *token = strtok(s, " ");
+                //int add = atoi(token);
+                if (pMatrix->matrix[row][c]= atoi(token)){
+                    sucess++;
                 }
-                index++;
+                
+                row++;
+                //if the current spot is not a space, not the end of the line and is = or greater than 0 (cant have negative distance)
+                //if (s[j] != ' ' && s[j] != '\n' && s[j] >= 0){
+                    //printf("in s");
+                    
+                    //parse to int to add to matrix
+                  //  int add = s[j] - '0';
+                    //printf("%d\n", add);
+                    //add value to the matrix & if successful, add one to the sucess counter
+                    //if (pMatrix->matrix[row][c]= add){
+                      //  sucess++;
+                    //
+                //}
             }
         }
+    }else{
+        return FILE_IO_ERROR;
     }
 
     //close the file
-    int fclose(FILE *fp);
+    fclose(fp);
+    if (sucess == NUMBER_OF_VERTICES){
+        return SUCCESS;
+    }else{
+        return FILE_IO_ERROR;
+    }
 }
 
+//stack struct for DFT
+typedef struct{
+    int top;
+} Stack;
 
-
-
-int doDepthFirstTraversal(AdjacencyMatrix *pMatrix, int startingNode, int traversalOutput[])
+int doDepthFirstTraversal(AdjacencyMatrix *pMatrix, int startingNode, int traversalOutput[]) //INCORRECT AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH LOOK AT INSTRUCTION BUT IN VIDEO FORM
 { 
     //initialise variables
     bool visited[NUMBER_OF_VERTICES][NUMBER_OF_VERTICES];
     int currentNode = pMatrix->matrix[0][0];
+    //set top visited
     visited[0][0] = true;
+    //set top of the stack to this
+    int top = visited[0][0];
+    Stack *stack;
+    stack->top =  pMatrix->matrix[0][0];
+
+    //keep track of current node
+    //check next availiable nodes - go to the smallest
+    //check if more, if not - backtrack
+
+
 
     //go to the following on nodes - NOT CURRENTLY ON FOLLOWING ON ONES
-    for (int i = 0; i<sizeOf(pMatrix); i++){
-        for (int j = 0; j<sizeOf(pMatrix); j++){
+    for (int i = 0; i<NUMBER_OF_VERTICES; i++){
+        //for each line
+        for (int j = 0; j<NUMBER_OF_VERTICES; j++){
+            //check if current place has an edge
             if(pMatrix->matrix[i][j] != 0){
-                //there is a edge here
                 //check if visited
                 if (visited[i][j] == true){
                     //exit
+                    break;
                 }else{
-                    //push the current node onto a stack
-                    //modify current node to be node i
+                    //set this node to the current node - basically push onto stack
+                    //currentNode = pMatrix->matrix[i][j];
+                    stack->top = currentNode;
                     currentNode = pMatrix->matrix[i][j];
-                    //record as visited
+                    //set as visited
                     visited[i][j] = true;
-                }
-                //check if can backtrack using the stack made- pop if nessesary, this will become the new current node - repeat above with this
             }
+        }
+    }
+
+
+
+    //MAY BE MORE ON THE RIGHT TRACK
+
+    //set all variables
+    int currentNode = startingNode;
+    int top = currentNode;
+    int stack[NUMBER_OF_VERTICES];
+    bool visited[NUMBER_OF_VERTICES];
+    visited[currentNode] = true;
+
+    //go to next unvisited node - if none, we are done
+    for (int i=0; i<NUMBER_OF_VERTICES; i++){
+        if (visited[i] = false){
+            //push current node onto stack
+            currentNode = i;
+            visited[currentNode] = true;
+            //is there another node to backtrack to? - check the stack
+                //pop node if present - this is the new current node
+                //repeat steps above
+            
         }
     }
 }

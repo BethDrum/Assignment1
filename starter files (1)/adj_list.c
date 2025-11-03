@@ -42,18 +42,25 @@
  * 
  * Remember to use myMalloc() to allocate memory instead of malloc(). 
  */
-int addEdgeToAdjacencyList(AdjacencyList *pList, int src, int dest, int weight)
+int addEdgeToAdjacencyList(AdjacencyList *pList, int src, int dest, int weight) //NEEDS TESTING - DOES IT NEED TO ADD IT TO THE MATRIX OR ANYTHING???
 {
-    // void casts to prevent 'unused variable warning'
-    // remove the following lines of code when you have 
-    // implemented the function yourself
-    (void)pList;
-    (void)src;
-    (void)dest;
-    (void)weight;
-
-    // returning NOT_IMPLEMENTED until your own implementation provided
-    return NOT_IMPLEMENTED;
+    //ensure all given values are valid
+    if (pList == NULL || src < 0 || src >= NUMBER_OF_VERTICES || dest < 0 || dest >= NUMBER_OF_VERTICES){
+        return INVALID_INPUT_PARAMETER;
+    }else{
+        //create newNode instance of ListNode - ensure it is initialised correctly 
+        ListNode *newNode = (ListNode*)myMalloc(sizeof(ListNode)); 
+        if (newNode == NULL){
+            return MEMORY_ALLOCATION_ERROR;
+        }
+        //set fields to according values
+        newNode->destNode = dest;
+        newNode->weight = weight;
+        newNode->next = pList->adjacencyList[src];
+        pList->adjacencyList[src] = newNode;
+        //return success
+        return SUCCESS;
+    }
 }
 
 /**
@@ -69,6 +76,20 @@ int addEdgeToAdjacencyList(AdjacencyList *pList, int src, int dest, int weight)
  */
 int populateAdjacencyMatrixFromAdjacencyList(AdjacencyMatrix *pMatrix, AdjacencyList *pList)
 {
+    //the list has positions recorded in each i - add those - in array as x - y - weight
+    //for (int i = 0; i<NUMBER_OF_VERTICES; i++){
+      //  if (i != NULL && i != 0){
+        //    int src = pList->adjacencyList[i][0];
+        //    int dest = pList->adjacencyList[i][1];
+        //    int weight = pList->adjacencyList[i][2];
+        //    addEdge(pMatrix, src, dest, weight);
+        //}
+    //}
+
+
+
+
+
     // void casts to prevent 'unused variable warning'
     // remove the following lines of code when you have 
     // implemented the function yourself
