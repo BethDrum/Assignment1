@@ -173,128 +173,101 @@ int addEdges(AdjacencyMatrix *pMatrix, Edge edges[], int edgeNum)
  * The function should return SUCCESS or a relevant error code.
  * 
  */
-int loadMatrixFromFile(AdjacencyMatrix *pMatrix, char filename[]) //NO OUTPUT???????????????????????????????????????????????????????????????????????????????????????????
-{
-    //LOOK AT THE FILE - LOTS OF ERROR STUFF TO PROBABLY ADD FOR IF THE GIVEN FILE IS WROMG - LIKE HAVE A FORMAT CHECK IN IT
+int loadMatrixFromFile(AdjacencyMatrix *pMatrix, char filename[]){
     //set up variables
     FILE *fp;
     char s[22];
     char ch = ' ';
     int sucess = 0;
     int row = 0;
+    
     //open the file
     fp = fopen(filename, "r");
     //if the file has opened correctly;
     if (fp !=NULL){
-        //ADD A FORMAT CHECK
-
         //while the line read in is not NULL;
         while (fgets(s, 22, fp) != NULL){
-            //printf("%s", s);
-            //set the column to 0
-            int c = 0;
-            //for the length of that line
+            //split by the space
+            char *token = strtok(s, " ");
+            //for the length of the vertice
             for (int j=0; j<(NUMBER_OF_VERTICES*2)-1; j++){
-                //split by the space
-                char *token = strtok(s, " ");
-                //int add = atoi(token);
-                if (pMatrix->matrix[row][c]= atoi(token)){
+                //assign that space in the matrix to the read in value
+                pMatrix->matrix[row][j]= atoi(token);
+                //if the token does not return NULL, add to sucess tracker
+                if (token != NULL){
                     sucess++;
                 }
-                
-                row++;
-                //if the current spot is not a space, not the end of the line and is = or greater than 0 (cant have negative distance)
-                //if (s[j] != ' ' && s[j] != '\n' && s[j] >= 0){
-                    //printf("in s");
-                    
-                    //parse to int to add to matrix
-                  //  int add = s[j] - '0';
-                    //printf("%d\n", add);
-                    //add value to the matrix & if successful, add one to the sucess counter
-                    //if (pMatrix->matrix[row][c]= add){
-                      //  sucess++;
-                    //
-                //}
+                //gather new token for next iteration
+                token = strtok(NULL, " ");
             }
+            //add to the row
+            row++;
         }
     }else{
+        //close the file and return error if failure to read in file
+        fclose(fp);
         return FILE_IO_ERROR;
     }
 
     //close the file
     fclose(fp);
-    if (sucess == NUMBER_OF_VERTICES){
+
+    //check if the file was read in successfully using sucess check gathered throughout
+    if (sucess == NUMBER_OF_VERTICES * NUMBER_OF_VERTICES){
         return SUCCESS;
     }else{
         return FILE_IO_ERROR;
     }
 }
 
-//stack struct for DFT
-typedef struct{
-    int top;
-} Stack;
 
-int doDepthFirstTraversal(AdjacencyMatrix *pMatrix, int startingNode, int traversalOutput[]) //INCORRECT AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH LOOK AT INSTRUCTION BUT IN VIDEO FORM
-{ 
-    //initialise variables
-    bool visited[NUMBER_OF_VERTICES][NUMBER_OF_VERTICES];
-    int currentNode = pMatrix->matrix[0][0];
-    //set top visited
-    visited[0][0] = true;
-    //set top of the stack to this
-    int top = visited[0][0];
-    Stack *stack;
-    stack->top =  pMatrix->matrix[0][0];
-
-    //keep track of current node
-    //check next availiable nodes - go to the smallest
-    //check if more, if not - backtrack
-
-
-
-    //go to the following on nodes - NOT CURRENTLY ON FOLLOWING ON ONES
-    for (int i = 0; i<NUMBER_OF_VERTICES; i++){
-        //for each line
-        for (int j = 0; j<NUMBER_OF_VERTICES; j++){
-            //check if current place has an edge
-            if(pMatrix->matrix[i][j] != 0){
-                //check if visited
-                if (visited[i][j] == true){
-                    //exit
-                    break;
-                }else{
-                    //set this node to the current node - basically push onto stack
-                    //currentNode = pMatrix->matrix[i][j];
-                    stack->top = currentNode;
-                    currentNode = pMatrix->matrix[i][j];
-                    //set as visited
-                    visited[i][j] = true;
-            }
-        }
-    }
-
-
-
+int doDepthFirstTraversal(AdjacencyMatrix *pMatrix, int startingNode, int traversalOutput[]){ 
     //MAY BE MORE ON THE RIGHT TRACK
 
     //set all variables
     int currentNode = startingNode;
-    int top = currentNode;
-    int stack[NUMBER_OF_VERTICES];
+    //int top = currentNode;
+    //int stack[NUMBER_OF_VERTICES];
     bool visited[NUMBER_OF_VERTICES];
+    int stack[NUMBER_OF_VERTICES];
+    int top = -1;
+    int outTrack = 1;
+    traversalOutput[0] = currentNode;
+
+    for (int k=0; k<NUMBER_OF_VERTICES; k++){
+        stack[k] = 0;
+        visited[k] = false;
+    }
     visited[currentNode] = true;
 
-    //go to next unvisited node - if none, we are done
-    for (int i=0; i<NUMBER_OF_VERTICES; i++){
-        if (visited[i] = false){
-            //push current node onto stack
-            currentNode = i;
-            visited[currentNode] = true;
-            //is there another node to backtrack to? - check the stack
-                //pop node if present - this is the new current node
-                //repeat steps above
-            
+    //go to next unvisited node - if none, we are done 
+    for (int q=0; q<NUMBER_OF_VERTICES; q++){
+        for (int i=0; i<NUMBER_OF_VERTICES; i++){
+            if (pMatrix->matrix[currentNode][i] > 0 && visited[i] == false){
+                printf("in if");
+                //add to the stack via increase track stack + adding to stack array
+                top ++;
+                stack[top] = currentNode;
+                currentNode = i;
+                //set visited
+                visited[i] = true;
+                //set traversal output
+                printf("%d", outTrack);
+                traversalOutput[outTrack] = currentNode;
+                outTrack ++;
+                i = -1;
+                //continue;
+            }
         }
+        //while more left in the 'stack'
+        if (top >= 0){
+            currentNode = stack[top];
+            stack[top] = 0;
+            top--;
+        }else{
+            break;
+        }
+        
     }
+    return SUCCESS;
 }

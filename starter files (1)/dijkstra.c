@@ -49,113 +49,49 @@
  * 
  * The function should return SUCCESS or a relevant error code.
  */
-int runDijsktraAlgorithm(AdjacencyMatrix *pMatrix, DijkstraTable *pTable, int startNode) //it never stops. maybe change the while?? or add a run counter and stop once max runs found??
-{
-    //int distance[NUMBER_OF_VERTICES];
-    //distance[currentNode] = 0;
-    //bool visited[NUMBER_OF_VERTICES] = false;
-    //bool visited[currentNode] = true;
-    //.... pointer fix
-
-
+int runDijsktraAlgorithm(AdjacencyMatrix *pMatrix, DijkstraTable *pTable, int startNode){
+    //set initial variables
     int currentNode = startNode;
     pTable->table[currentNode].distance = 0;
     pTable->table[currentNode].visited = true;
-    bool firstRun = true;
-    int currentDistance = 0;
+    int newDist = 0;
 
     for (int k=0; k<NUMBER_OF_VERTICES; k++){
         //for all nodes
-        pTable->table[currentNode].visited = true;
 
-        //update table distance
+        //update table distance first
         for (int i = 0; i< NUMBER_OF_VERTICES; i++){
-            int newDist = pTable->table[currentNode].distance + pMatrix->matrix[currentNode][i];
-            //need more for calcualted distance
-            if (newDist > 0 && pTable->table[i].visited == false){
-                pTable->table[i].distance = newDist;
-                pTable->table[i].predecessor = currentNode;
+            //error check to ensure the current weight is greater than 0
+            if (pMatrix->matrix[currentNode][i] > 0){
+                //calculate new distance to store
+                newDist = pTable->table[currentNode].distance + pMatrix->matrix[currentNode][i];
+                //ensure the distance is less than whats currently stored
+                if (newDist < pTable->table[i].distance){
+                    //assign new variables to dijsktra table
+                    pTable->table[i].distance = newDist;
+                    pTable->table[i].predecessor = currentNode;
+                }
             }
         }
 
 
         //to find the shortest distance to a unvisited node
-        //set next node variables to be empty
-        int currentNode = -1;
-        for (int i=0; i<NUMBER_OF_VERTICES; i++){
+        for (int j=0; j<NUMBER_OF_VERTICES; j++){
             //initialise variables
             int dist = -1;
-            //navigate to next edge in the matrix
-            //for (int j=0; j<NUMBER_OF_VERTICES; j++){
-                //seperate the && to the ||??
-            if (pTable->table[i].visited == false){
-                if (currentNode == -1 || pTable->table[i].distance < pTable->table[currentNode].distance){
-                    currentNode = i;
-                }
+            //check if the current edge has been visited
+            if (pTable->table[j].visited == false){
+                //set current node as visited in the dijskttra table and set currentNode to j
+                pTable->table[currentNode].visited = true;    
+                currentNode = j;
+                //exit the loop
+                break;
             }
         }
-
-        //check if there are any nodes left
-        if(currentNode == -1){
-            return SUCCESS;
-        }
-        
     }
-            //}else{
-              //  firstRun = false;
-            //}
-            //return success if there are no nodes left
-
-
-            /*
-            for(int j=0; j<NUMBER_OF_VERTICES; j++){
-                //check if node has been visited and find the shortest out of those not
-
-                if (pTable->table[j].visited == false && pTable->table[j].distance < currentDistance){
-                    currentNode = j;
-                }
-            }
-        //go through adjency matrix to find non-sero edges for this node
-        for (int i=0; i<NUMBER_OF_VERTICES; i++){
-            //check if the node has a edge here or not and ensure edge hasnt been visited
-            if (pMatrix->matrix[currentNode][i] > 0 && pTable->table[i].visited == false){//theres a or 1/0 in the guide here - check??
-                //calcualte distance
-                int totalDistance = pTable->table[currentNode].distance + pMatrix->matrix[currentNode][i];
-                //if the distance is smaller, replace current stored
-                if (pTable->table[i].distance > totalDistance){
-                    pTable->table[i].distance = totalDistance;
-                }
-            }
-        }
-        }
-        firstRun = false;
-        //set node to visited
-        pTable->table[currentNode].visited = true; 
-        */
-    }
-
-
-
-
-
-
-
-    //navigate to the row of the start node
-    //for size of a row
-  //  for (int i=0; i<sizeof(NUMBER_OF_VERTICES); i++){
-    //    currentW = pMatrix->matrix[startNode][0];
-        //if startnode is less than previous then:
-        //go through all places in that row to find the smallest number (thats not 0)
-      //  if (pMatrix->matrix[startNode][i] != 0 && pMatrix->matrix[startNode][i] > currentW){
-        //    currentW = pMatrix->matrix[startNode][i];
-          //  place = i;
-        //}
-    //}
-    //return place;
-    //WHAT IF THERE IS 2 THE SAME DISTANCE
-    //return that place in the table (?)
-
-
+    //return success to the main program
+    return SUCCESS;
+}
 
 /**
  * This function should determine the shortest path that exists on a graph 
@@ -174,16 +110,21 @@ int runDijsktraAlgorithm(AdjacencyMatrix *pMatrix, DijkstraTable *pTable, int st
  * 
  * The function should return SUCCESS or a relevant error code.
  */
-int getShortestPathFrom(DijkstraTable *pTable, int nodeFrom, int nodeTo, int pathFound[])
-{
-    // void casts to prevent 'unused variable warning'
-    // remove the following lines of code when you have 
-    // implemented the function yourself
-    (void)pTable;
-    (void)nodeFrom;
-    (void)nodeTo;
-    (void)pathFound;
+int getShortestPathFrom(DijkstraTable *pTable, int nodeFrom, int nodeTo, int pathFound[]){
+    //initialise variables
+    int startNode = nodeFrom;
+    int endNode = nodeTo;
+    int track = 0;
+    pathFound[track] = endNode;
+    track++;
 
-    // returning NOT_IMPLEMENTED until your own implementation provided
-    return NOT_IMPLEMENTED;
+    //for all nodes from end to start (also known as, backwards)
+    for (int j = endNode-1; j>startNode; j--){
+        //add path to given array
+        pathFound[track] = pTable->table[j+1].predecessor;
+        //add 1 to tracker - this ensures the pathFound array is added to correctly. 
+        track++;
+    }    
+    //return success message
+    return SUCCESS;
 }

@@ -50,12 +50,12 @@ int main()
     //testDoDepthFirstTraversal();
 
     // test the runDijsktraAlgorithm() function
-    printf("\n## NEXT TEST : runDijsktraAlgorithm() ##\n");
-    testRunDijsktraAlgorithm();
+    //printf("\n## NEXT TEST : runDijsktraAlgorithm() ##\n");
+    //testRunDijsktraAlgorithm();
 
     // test the getShortestPathFrom() function
-    //printf("\n## NEXT TEST : getShortestPathFrom() ##\n");
-    //testGetShortestPathFrom();
+    printf("\n## NEXT TEST : getShortestPathFrom() ##\n");
+    testGetShortestPathFrom();
 
     // test the addEdgeToAdjacencyList() function
     //printf("\n## NEXT TEST : addEdgeToAdjacencyList() ##\n");
