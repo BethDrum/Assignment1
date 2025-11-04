@@ -64,7 +64,7 @@ int runDijsktraAlgorithm(AdjacencyMatrix *pMatrix, DijkstraTable *pTable, int st
     bool firstRun = true;
     int currentDistance = 0;
 
-    while (true){
+    for (int k=0; k<NUMBER_OF_VERTICES; k++){
         //for all nodes
         pTable->table[currentNode].visited = true;
 
@@ -97,10 +97,9 @@ int runDijsktraAlgorithm(AdjacencyMatrix *pMatrix, DijkstraTable *pTable, int st
 
         //check if there are any nodes left
         if(currentNode == -1){
-        //return SUCCESS;
-        break;
+            return SUCCESS;
         }
-        printf("ran");
+        
     }
             //}else{
               //  firstRun = false;
