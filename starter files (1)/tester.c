@@ -54,16 +54,16 @@ int main()
     //testRunDijsktraAlgorithm();
 
     // test the getShortestPathFrom() function
-    printf("\n## NEXT TEST : getShortestPathFrom() ##\n");
-    testGetShortestPathFrom();
+    //printf("\n## NEXT TEST : getShortestPathFrom() ##\n");
+    //testGetShortestPathFrom();
 
     // test the addEdgeToAdjacencyList() function
     //printf("\n## NEXT TEST : addEdgeToAdjacencyList() ##\n");
     //testAddEdgeToAdjacencyList();
 
     // test the populateAdjacencyMatrixFromAdjacencyList() function
-    //printf("\n## NEXT TEST : populateAdjacencyMatrixFromAdjacencyList() ##\n");
-    //testPopulateAdjacencyMatrixFromAdjacencyList();
+    printf("\n## NEXT TEST : populateAdjacencyMatrixFromAdjacencyList() ##\n");
+    testPopulateAdjacencyMatrixFromAdjacencyList();
 }
 
 
@@ -221,7 +221,7 @@ void testAddEdges()
        THE FUNCTION SHOULD PROCESS AS MANY EDGES AS IT CAN AND RETURN A RESULT OF 'PARTIAL_SUCCESS'.
        TRY THIS NOW */
 
-    /* UNCOMMENT THIS CODE IF / WHEN YOU WANT TO USE IT 
+    // UNCOMMENT THIS CODE IF / WHEN YOU WANT TO USE IT 
     // create another, fresh, empty adjacency matrix to use
     AdjacencyMatrix matrix2;
     
@@ -254,7 +254,6 @@ void testAddEdges()
     {
         printf("\nTesting 'addEdges()'. Function does NOT report PARTIAL_SUCCESS as expected.\n");
     }
-    */
 }
 
 // run tests on the 'loadMatrixFromFile' function

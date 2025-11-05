@@ -50,21 +50,26 @@
  * The function should return SUCCESS or a relevant error code.
  */
 int runDijsktraAlgorithm(AdjacencyMatrix *pMatrix, DijkstraTable *pTable, int startNode){
+    //check incoming variables
+    if (pMatrix == NULL || pTable == NULL || startNode <= 0 || startNode > NUMBER_OF_VERTICES){
+        return INVALID_INPUT_PARAMETER;
+    }
+    
     //set initial variables
     int currentNode = startNode;
     pTable->table[currentNode].distance = 0;
     pTable->table[currentNode].visited = true;
     int newDist = 0;
 
+    //first, update distance table (as starting node already given)
+    //for all nodes
     for (int k=0; k<NUMBER_OF_VERTICES; k++){
-        //for all nodes
-
-        //update table distance first
         for (int i = 0; i< NUMBER_OF_VERTICES; i++){
             //error check to ensure the current weight is greater than 0
             if (pMatrix->matrix[currentNode][i] > 0){
                 //calculate new distance to store
                 newDist = pTable->table[currentNode].distance + pMatrix->matrix[currentNode][i];
+                
                 //ensure the distance is less than whats currently stored
                 if (newDist < pTable->table[i].distance){
                     //assign new variables to dijsktra table
@@ -74,10 +79,9 @@ int runDijsktraAlgorithm(AdjacencyMatrix *pMatrix, DijkstraTable *pTable, int st
             }
         }
 
-
         //to find the shortest distance to a unvisited node
         for (int j=0; j<NUMBER_OF_VERTICES; j++){
-            //initialise variables
+            //initialise variable
             int dist = -1;
             //check if the current edge has been visited
             if (pTable->table[j].visited == false){
@@ -111,6 +115,11 @@ int runDijsktraAlgorithm(AdjacencyMatrix *pMatrix, DijkstraTable *pTable, int st
  * The function should return SUCCESS or a relevant error code.
  */
 int getShortestPathFrom(DijkstraTable *pTable, int nodeFrom, int nodeTo, int pathFound[]){
+    //check incoming parameters
+    if (pTable == NULL || nodeFrom <= 0 || nodeFrom > NUMBER_OF_VERTICES || nodeTo <= 0 || nodeTo > NUMBER_OF_VERTICES || pathFound == NULL){
+        return INVALID_INPUT_PARAMETER;
+    }
+
     //initialise variables
     int startNode = nodeFrom;
     int endNode = nodeTo;

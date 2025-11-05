@@ -31,6 +31,7 @@
 #include "my_malloc.h"  // gives access to memory allocation functions, including 'myMalloc'
 #include "adj_matrix.h" // provides the definition of the 'Adjacency Matrix' struct which is required for one of the functions below
 #include "adj_list.h"   // provides the definition of structs and functions for the adjacency list implementation
+#include <stdio.h>      //used for on the go testing
 
 /** #### FUNCTION IMPLEMENTATIONS ## */
 
@@ -44,11 +45,12 @@
  */
 int addEdgeToAdjacencyList(AdjacencyList *pList, int src, int dest, int weight) //NEEDS TESTING - DOES IT NEED TO ADD IT TO THE MATRIX OR ANYTHING???
 {
+    //check all incoming parameters are valid, proceed if so
     //ensure all given values are valid
     if (pList == NULL || src < 0 || src >= NUMBER_OF_VERTICES || dest < 0 || dest >= NUMBER_OF_VERTICES){
         return INVALID_INPUT_PARAMETER;
     }else{
-        //create newNode instance of ListNode - ensure it is initialised correctly 
+        //create newNode instance of ListNode and ensure memory is allocated correctly
         ListNode *newNode = (ListNode*)myMalloc(sizeof(ListNode)); 
         if (newNode == NULL){
             return MEMORY_ALLOCATION_ERROR;
@@ -75,27 +77,29 @@ int addEdgeToAdjacencyList(AdjacencyList *pList, int src, int dest, int weight) 
  * The function should return SUCCESS or an error code. 
  */
 int populateAdjacencyMatrixFromAdjacencyList(AdjacencyMatrix *pMatrix, AdjacencyList *pList)
-{
-    //the list has positions recorded in each i - add those - in array as x - y - weight
-    //for (int i = 0; i<NUMBER_OF_VERTICES; i++){
-      //  if (i != NULL && i != 0){
-        //    int src = pList->adjacencyList[i][0];
-        //    int dest = pList->adjacencyList[i][1];
-        //    int weight = pList->adjacencyList[i][2];
-        //    addEdge(pMatrix, src, dest, weight);
-        //}
-    //}
+{   
+    //check incoming inputs
+    if (pMatrix == NULL || pList == NULL){
+        return INVALID_INPUT_PARAMETER;
+    }
 
+    //for all rows in the stored list
+    for (int i=0; i<NUMBER_OF_VERTICES; i++){
+        //create a new iteration of listNode for the current place in the list
+        ListNode *curr = pList->adjacencyList[i];
 
-
-
-
-    // void casts to prevent 'unused variable warning'
-    // remove the following lines of code when you have 
-    // implemented the function yourself
-    (void)pList;
-    (void)pMatrix;
-
-    // returning NOT_IMPLEMENTED until your own implementation provided
-    return NOT_IMPLEMENTED;
+        //if there is something stored in this space in the list:
+        while (curr != NULL){
+            //ensure the held weight is greater than 0 and destNode is within parameters set - if not, return error message
+            if (curr->weight > 0 || curr->destNode < NUMBER_OF_VERTICES || curr->destNode > 0){
+                //add it to the matrix
+                pMatrix->matrix[i][curr->destNode] = curr->weight;
+                //set current to the next availiable point in the list
+                curr = curr->next;
+            }else{
+                return INVALID_INPUT_PARAMETER;
+            }
+        }
+    }
+    return SUCCESS;
 }

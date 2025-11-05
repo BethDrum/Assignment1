@@ -51,10 +51,11 @@
  */
 AdjacencyMatrix* createAdjacencyMatrix(int defaultEdgeValue)
 {
+
     //create the adjacency matrix - size of pre defined number of vertices
     AdjacencyMatrix *qMatrix = NULL;
-    qMatrix = (AdjacencyMatrix*)myMalloc(sizeof(AdjacencyMatrix));
 
+    qMatrix = (AdjacencyMatrix*)myMalloc(sizeof(AdjacencyMatrix));
     //check dynamic memory allocation for errors
     if (qMatrix == NULL){
         return NULL;
@@ -80,28 +81,14 @@ AdjacencyMatrix* createAdjacencyMatrix(int defaultEdgeValue)
  */
 int addEdge(AdjacencyMatrix *pMatrix, int src, int dest, int weight)
 {
-    //set the corresponding place in the adjancy matrix to = the weight 
-    if (pMatrix->matrix[src][dest] = weight){
-        return SUCCESS;
-    }else{
+    //check inputs
+    if (pMatrix == NULL || src < 0 || src >= NUMBER_OF_VERTICES || dest < 0 || dest >= NUMBER_OF_VERTICES || weight < 0){
         return INVALID_INPUT_PARAMETER;
+    }else{
+        //set the corresponding place in the adjancy matrix to = the weight 
+        pMatrix->matrix[src][dest] = weight;
+        return SUCCESS;
     }
-
-
-    //ADD ERROR CHECKING ON INPUTS
-
-
-
-    //NO
-    //navigate to that place in the array
-    //for(int i=0; i<sizeof(pMatrix[]); i++){
-     //   for (int j=0; j<sizeof(pMatrix); j++){
-     //       //change it to be a point and add values
-     //       pMatrix->matrix[i][j].src = src;
-     //       pMatrix->matrix[i][j].dest = dest;
-            
-      //  }
-    //}
 }
 
 /**
@@ -122,27 +109,35 @@ int addEdge(AdjacencyMatrix *pMatrix, int src, int dest, int weight)
  */
 int addEdges(AdjacencyMatrix *pMatrix, Edge edges[], int edgeNum)
 { 
-    int fail = 0;
-    //for all edges entered
+    //check inputs
+    if (pMatrix == NULL || edges == NULL || edgeNum < 0){
+        return INVALID_INPUT_PARAMETER;
+    }
+
+    //initialise values
+    int correct = 0;
+
+    //for the number of the given edges
     for (int i = 0; i<edgeNum; i++){
-        //check edge is within bounds for dest, src and weight are all >=0
-        if ((edges[i].dest >= 0 && edges[i].src >= 0 && edges[i].weight >=0)){ //put x and y value in
-            //add edge to the array
-            if (addEdge(pMatrix, edges[i].dest, edges[i].src, edges[i].weight) == INVALID_INPUT_PARAMETER){
-                //if adding the edge returns a fail code, add 1 to the fail count
-                fail++;
+        //check if the current edge is within bounds for dest, src are smaller than the given number of vertices. Also check that both of those & weight are all >=0 
+        if ((edges[i].dest >= 0 && edges[i].dest < NUMBER_OF_VERTICES && edges[i].src >= 0 && edges[i].src < NUMBER_OF_VERTICES && edges[i].weight >=0)){
+            //add edge to the array using addEdge
+            int result = addEdge(pMatrix, edges[i].src, edges[i].dest, edges[i].weight);
+            if (result == SUCCESS){
+                //if adding the edge returns a success code, add 1 to the correct count
+                correct++;
             }
         }
+    }
 
-        //decide failure amount
-        if (fail == edgeNum){
-            return INVALID_INPUT_PARAMETER;
-        }else if (fail == 0){
+    //according to the number added successfully, return a corresponding success/error code
+        if (correct == edgeNum){
             return SUCCESS;
+        }else if (correct == 0){
+            return INVALID_INPUT_PARAMETER;
         }else{
             return PARTIAL_SUCCESS;
         }
-    }
 }
 
 /**
@@ -174,6 +169,11 @@ int addEdges(AdjacencyMatrix *pMatrix, Edge edges[], int edgeNum)
  * 
  */
 int loadMatrixFromFile(AdjacencyMatrix *pMatrix, char filename[]){
+    //check all incoming variables
+    if (pMatrix == NULL || filename == NULL || filename[0] == '\0'){
+        return INVALID_INPUT_PARAMETER;
+    }
+    
     //set up variables
     FILE *fp;
     char s[22];
@@ -222,52 +222,57 @@ int loadMatrixFromFile(AdjacencyMatrix *pMatrix, char filename[]){
 
 
 int doDepthFirstTraversal(AdjacencyMatrix *pMatrix, int startingNode, int traversalOutput[]){ 
-    //MAY BE MORE ON THE RIGHT TRACK
-
+    //check all incoming variables
+    if (pMatrix == NULL || startingNode < 0 || startingNode > NUMBER_OF_VERTICES || traversalOutput == NULL){
+        return INVALID_INPUT_PARAMETER;
+    }
+    
     //set all variables
     int currentNode = startingNode;
-    //int top = currentNode;
-    //int stack[NUMBER_OF_VERTICES];
     bool visited[NUMBER_OF_VERTICES];
     int stack[NUMBER_OF_VERTICES];
     int top = -1;
     int outTrack = 1;
     traversalOutput[0] = currentNode;
 
+    //initialise stack & visited to 0/false for all positions in their array
     for (int k=0; k<NUMBER_OF_VERTICES; k++){
         stack[k] = 0;
         visited[k] = false;
     }
+    //set current node visited to true as this is our starting point
     visited[currentNode] = true;
 
-    //go to next unvisited node - if none, we are done 
-    for (int q=0; q<NUMBER_OF_VERTICES; q++){
-        for (int i=0; i<NUMBER_OF_VERTICES; i++){
-            if (pMatrix->matrix[currentNode][i] > 0 && visited[i] == false){
-                printf("in if");
-                //add to the stack via increase track stack + adding to stack array
+    //go to next unvisited node
+    for (int i=0; i<NUMBER_OF_VERTICES; i++){
+        for (int j=0; j<NUMBER_OF_VERTICES; j++){
+            //ensure the current edge is present and has not been visited
+            if (pMatrix->matrix[currentNode][j] > 0 && visited[j] == false){
+                //'push' the current node onto the stack
                 top ++;
                 stack[top] = currentNode;
-                currentNode = i;
-                //set visited
-                visited[i] = true;
-                //set traversal output
-                printf("%d", outTrack);
+                
+                //move to the next node using j and set visited to true
+                currentNode = j;
+                visited[j] = true;
+
+                //record the traversal
                 traversalOutput[outTrack] = currentNode;
-                outTrack ++;
-                i = -1;
-                //continue;
+
+                //restart j loop
+                j = -1;
             }
         }
+        
         //while more left in the 'stack'
         if (top >= 0){
+            //s'pop' from the stack to backtrack if needed before continuing 
             currentNode = stack[top];
-            stack[top] = 0;
             top--;
         }else{
+            //the stack is empty so it can now exit
             break;
         }
-        
     }
     return SUCCESS;
 }
