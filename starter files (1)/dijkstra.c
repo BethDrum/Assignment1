@@ -51,7 +51,7 @@
  */
 int runDijsktraAlgorithm(AdjacencyMatrix *pMatrix, DijkstraTable *pTable, int startNode){
     //check incoming variables
-    if (pMatrix == NULL || pTable == NULL || startNode <= 0 || startNode > NUMBER_OF_VERTICES){
+    if (pMatrix == NULL || pTable == NULL || startNode < 0 || startNode > NUMBER_OF_VERTICES){
         return INVALID_INPUT_PARAMETER;
     }
     

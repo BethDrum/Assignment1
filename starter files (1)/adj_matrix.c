@@ -58,7 +58,7 @@ AdjacencyMatrix* createAdjacencyMatrix(int defaultEdgeValue)
     qMatrix = (AdjacencyMatrix*)myMalloc(sizeof(AdjacencyMatrix));
     //check dynamic memory allocation for errors
     if (qMatrix == NULL){
-        return NULL;
+        return MEMORY_ALLOCATION_ERROR;
     }
 
     //initialise with default edge given
@@ -263,7 +263,7 @@ int doDepthFirstTraversal(AdjacencyMatrix *pMatrix, int startingNode, int traver
                 j = -1;
             }
         }
-        
+
         //while more left in the 'stack'
         if (top >= 0){
             //s'pop' from the stack to backtrack if needed before continuing 
