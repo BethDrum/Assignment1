@@ -58,7 +58,7 @@ AdjacencyMatrix* createAdjacencyMatrix(int defaultEdgeValue)
     qMatrix = (AdjacencyMatrix*)myMalloc(sizeof(AdjacencyMatrix));
     //check dynamic memory allocation for errors
     if (qMatrix == NULL){
-        return MEMORY_ALLOCATION_ERROR;
+        return NULL;
     }
 
     //initialise with default edge given

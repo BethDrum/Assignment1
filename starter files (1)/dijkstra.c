@@ -61,7 +61,7 @@ int runDijsktraAlgorithm(AdjacencyMatrix *pMatrix, DijkstraTable *pTable, int st
     pTable->table[currentNode].visited = true;
     int newDist = 0;
 
-    //first, update distance table (as starting node already given)
+    //first, add the shortest distance to the table for that node 
     //for all nodes
     for (int k=0; k<NUMBER_OF_VERTICES; k++){
         for (int i = 0; i< NUMBER_OF_VERTICES; i++){
@@ -79,7 +79,7 @@ int runDijsktraAlgorithm(AdjacencyMatrix *pMatrix, DijkstraTable *pTable, int st
             }
         }
 
-        //to find the shortest distance to a unvisited node
+        //to get the next node to go to
         for (int j=0; j<NUMBER_OF_VERTICES; j++){
             //initialise variable
             int dist = -1;
